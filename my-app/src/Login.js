@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './styles/Register.css';
+import './styles/Login.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
 
-const Register = () => {
+const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -22,8 +23,8 @@ const Register = () => {
       newErrors.email = 'Only Gmail addresses are allowed';
     }
 
-    if (password.length < 8 || !/[A-Z]/.test(password) || !/\d/.test(password)) {
-      newErrors.password = 'Password must be 8+ chars, include a number and uppercase letter';
+    if (!password) {
+      newErrors.password = 'Password is required';
     }
 
     setErrors(newErrors);
@@ -34,37 +35,32 @@ const Register = () => {
     e.preventDefault();
     if (validate()) {
       try {
-        const response = await fetch('http://localhost:5000/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password })
+        const response = await axios.post('http://localhost:5000/api/auth/login', {
+          email,
+          password,
         });
 
-        const data = await response.json();
-        if (response.ok) {
-          navigate('/success', { state: { email: data.email } });
-        } else {
-          setErrors({ server: data.error || 'Registration failed' });
+        if (response.status === 200) {
+          // Optional: Store token for future use
+          localStorage.setItem('token', response.data.token);
+
+          // Redirect to Welcome page
+          navigate('/welcome', { state: { email } });
         }
       } catch (err) {
-        setErrors({ server: 'Server error. Please try again.' });
+        const message = err.response?.data?.message || 'Login failed';
+        setErrors({ server: message });
       }
     }
   };
 
-  const handleReset = () => {
-    setEmail('');
-    setPassword('');
-    setErrors({});
-  };
-
-  const handleLoginRedirect = () => {
-    navigate('/login');
+  const handleRegisterRedirect = () => {
+    navigate('/register');
   };
 
   return (
-    <div className="register-container">
-      <h2>AI Power Career Companion</h2>
+    <div className="login-container">
+      <h2>Login to Dashboard</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label>Email:</label>
@@ -95,17 +91,18 @@ const Register = () => {
 
         {errors.server && <p className="error">{errors.server}</p>}
 
-        <div className="button-group">
-          <button type="submit">Register</button>
-          <button type="button" onClick={handleReset}>Re-Enter</button>
-        </div>
+        <button type="submit">Login</button>
       </form>
 
-      <button type="button" onClick={handleLoginRedirect} className="login-redirect-button">
-        Already have an account? Login
+      <button
+        type="button"
+        onClick={handleRegisterRedirect}
+        className="register-redirect-button"
+      >
+        Don't have an account? Register
       </button>
     </div>
   );
 };
 
-export default Register;
+export default Login;

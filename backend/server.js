@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
-// Register Route
+// Registration Route
 app.post('/register', async (req, res) => {
   const { email, password } = req.body;
 
@@ -57,12 +57,30 @@ app.post('/register', async (req, res) => {
   }
 });
 
-// Serve React Frontend (Production)
+// Login Route
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ error: 'User not found' });
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(400).json({ error: 'Invalid password' });
+
+    res.status(200).json({ email: user.email });
+  } catch (err) {
+    console.error('❌ Login error:', err);
+    res.status(500).json({ error: 'Server error. Please try again.' });
+  }
+});
+
+// Serve React Frontend in Production
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../my-app/src')));
+  app.use(express.static(path.join(__dirname, '../my-app/build')));
 
   app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../my-app/src/Register.js'));
+    res.sendFile(path.join(__dirname, '../my-app/build/index.html'));
   });
 }
 

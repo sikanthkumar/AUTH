@@ -1,13 +1,13 @@
-/* styles/Register.css */
+/* styles/Login.css */
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(to right, #eaf4fc, #dbe7f3);
+  background: linear-gradient(to right, #eef2f7, #dbe7f3);
   margin: 0;
   padding: 0;
 }
 
-.register-container {
+.login-container {
   max-width: 400px;
   margin: 60px auto;
   padding: 30px;
@@ -19,7 +19,7 @@ body {
 h2 {
   text-align: center;
   margin-bottom: 25px;
-  color: #0078d4;
+  color: #333;
 }
 
 form > div {
@@ -68,15 +68,8 @@ input:focus {
   margin-top: 5px;
 }
 
-.button-group {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-button[type="submit"],
-button[type="button"] {
-  flex: 1;
+button[type="submit"] {
+  width: 100%;
   padding: 10px;
   background-color: #0078d4;
   color: white;
@@ -87,12 +80,11 @@ button[type="button"] {
   transition: background-color 0.3s;
 }
 
-button[type="submit"]:hover,
-button[type="button"]:hover {
+button[type="submit"]:hover {
   background-color: #005ea2;
 }
 
-.login-redirect-button {
+.register-redirect-button {
   margin-top: 20px;
   background-color: #f3f3f3;
   color: #0078d4;
@@ -104,6 +96,6 @@ button[type="button"]:hover {
   width: 100%;
 }
 
-.login-redirect-button:hover {
+.register-redirect-button:hover {
   background-color: #e6e6e6;
 }
