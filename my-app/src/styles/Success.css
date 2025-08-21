@@ -1,0 +1,23 @@
+.success-container {
+  text-align: center;
+  padding: 2rem;
+  background-color: #f0fff0;
+  border: 1px solid #cce5cc;
+  border-radius: 8px;
+  margin: 2rem auto;
+  max-width: 400px;
+}
+
+.success-container h2 {
+  color: #28a745;
+}
+
+.success-container button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
